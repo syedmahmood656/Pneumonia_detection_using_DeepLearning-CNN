@@ -1,0 +1,9 @@
+kaggle
+pandas
+numpy
+scikit-learn
+h5py
+matplotlib
+opencv-python
+torch
+albumentations
