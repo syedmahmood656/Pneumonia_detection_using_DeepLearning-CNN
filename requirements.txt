@@ -1,9 +1,46 @@
-kaggle
-pandas
-numpy
-scikit-learn
-h5py
-matplotlib
-opencv-python
-torch
-albumentations
+# Core
+torch>=2.5.0,<2.7.0
+torchvision>=0.20.0,<0.23.0
+pytorch-lightning>=2.4.0,<2.6.0
+torchmetrics>=1.5.0
+
+# Data
+pandas>=2.2.0
+numpy>=1.26.0,<3.0
+scikit-learn>=1.5.0
+h5py>=3.11.0
+opencv-python>=4.10.0
+albumentations>=1.4.0
+Pillow>=10.4.0
+pydicom>=3.0.0
+
+# Training
+wandb>=0.18.0
+omegaconf>=2.3.0
+
+# Explainability
+grad-cam>=1.5.0
+shap>=0.45.0
+
+# Inference
+onnx>=1.17.0
+onnxruntime>=1.19.0
+onnxruntime-tools>=1.7.0
+
+# API
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.20
+loguru>=0.7.3
+
+# Model Hub
+huggingface-hub>=0.26.0
+
+# Frontend
+gradio>=5.0.0
+
+# Data versioning
+dvc>=3.55.0
+
+# Monitoring
+prometheus-client>=0.21.0
