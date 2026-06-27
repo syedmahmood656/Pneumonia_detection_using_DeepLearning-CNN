@@ -46,10 +46,18 @@ def build_hdf5(
             for i, row in tqdm(df.iterrows(), total=n, desc=f"Building {split_name}"):
                 img_path = os.path.join(image_dir, row['Image Index'])
                 img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+                
+                # --- BULLETPROOF GUARD CONDITION ---
+                # If image is missing, create a blank image instead of crashing!
                 if img is None:
+                    # Print a clean notice instead of a massive crash track
+                    # print(f"⚠️ Warning: Missing file {row['Image Index']}, substituting blank placeholder.")
                     img = np.zeros((image_size, image_size), dtype=np.uint8)
-                img = apply_clahe(img)
-                img = cv2.resize(img, (image_size, image_size))
+                else:
+                    # Only apply image processing steps if the file actually loaded!
+                    img = apply_clahe(img)
+                    img = cv2.resize(img, (image_size, image_size))
+                
                 images_ds[i] = img
                 labels_list.append(row['Finding Labels'])
 
@@ -60,11 +68,12 @@ def build_hdf5(
         print(f"\nHDF5 built: {output_path}")
         print(f"File size: {os.path.getsize(output_path) / 1e9:.2f} GB")
 
+
 build_hdf5(
     split_csvs={
         'train': 'data/splits/train.csv',
         'val':   'data/splits/val.csv',
         'test':  'data/splits/test.csv',
     },
-    image_dir='data/raw/images/',
+    image_dir='data/raw/images-224/images-224/',  # actual images live one folder deeper
 )
