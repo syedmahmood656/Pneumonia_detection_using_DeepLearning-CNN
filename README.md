@@ -101,72 +101,70 @@ Custom CNN trained from scratch on NIH ChestX-ray14 subset.
 
 
 # 🛠 Tech Stack
-Framework: PyTorch & PyTorch Lightning
 
-Data Processing: OpenCV, Albumentations, h5py, pandas, scikit-learn
+* **Framework:** PyTorch & PyTorch Lightning
+* **Data Processing:** OpenCV, Albumentations, h5py, pandas, scikit-learn
+* **Loss & Metrics:** Custom Focal Loss, torchmetrics (Macro AUC-ROC, F1-Score)
+* **Optimization & Serialization:** ONNX Runtime, Dynamic INT8 Quantization
+* **Backend API:** FastAPI & Uvicorn
+* **Frontend UI:** Gradio
+* **Experiment Tracking:** Weights & Biases (W&B)
 
-Loss & Metrics: Custom Focal Loss, torchmetrics (Macro AUC-ROC, F1-Score)
-
-Optimization & Serialization: ONNX Runtime, Dynamic INT8 Quantization
-
-Backend API: FastAPI & Uvicorn
-
-Frontend UI: Gradio
-
-Experiment Tracking: Weights & Biases (W&B)
+---
 
 # 📊 Dataset & Data Engineering
 
 The pipeline uses a preprocessed subset of the **NIH ChestX-ray14** dataset.
 
-**Stratified Sampling**: Retains 100% of rare pathologies (Hernia, Pneumonia, Fibrosis), while capping majority "No Finding" instances at 2,000 to resolve severe class imbalance.
+* **Stratified Sampling:** Retains 100% of rare pathologies (Hernia, Pneumonia, Fibrosis), while capping majority "No Finding" instances at 2,000 to resolve severe class imbalance.
+* **CLAHE Enhancement:** Applies Contrast Limited Adaptive Histogram Equalization locally to emphasize subtle anatomical contrast variations in dense lung regions.
+* **High-Speed HDF5 Storage:** Packs processed $224 \times 224$ images into a single `.h5` binary database container (`cxr_dataset.h5`), speeding up training I/O streaming by ~40%.
+* **Data Augmentation:** Applies anatomically plausible transforms via `albumentations` (horizontal flips, small rotations, contrast shifts, spatial distortions).
 
-**CLAHE Enhancement:** Applies Contrast Limited Adaptive Histogram Equalization locally to emphasize subtle anatomical contrast variations in dense lung regions.
+---
 
-**High-Speed HDF5 Storage:** Packs processed $224 \times 224$ images into a single .h5 binary database container (cxr_dataset.h5), speeding up training I/O streaming by ~40%.
+# 🚀 Installation & Quickstart
 
-**Data Augmentation:** Applies anatomically plausible transforms via albumentations (horizontal flips, small rotations, contrast shifts, spatial distortions).
-
-**🚀 Installation & Quickstart**
-**1. Clone the Repository**
-Bash
+### 1. Clone the Repository
+```bash
 git clone [https://github.com/your-username/CNN-Pneumonia_detector.git](https://github.com/your-username/CNN-Pneumonia_detector.git)
 cd CNN-Pneumonia_detector
 
-**2 Set Up Virtual Environment & Dependencies**
+# 2. Set Up Virtual Environment & Dependencies
 
 python -m venv venv
-On Windows:
+
+# On Windows:
 .\venv\Scripts\activate
-On Linux/macOS:
+
+# On Linux/macOS:
 source venv/bin/activate
 
 pip install -r requirements.txt
 
-**3. Run Data Pipeline & Preprocessing**
-Bash
-Generate stratified splits
+# 3. Run Data Pipeline & Preprocessing
+
+# Generate stratified splits
 python -c "from src.data.sampling import create_stratified_subset; create_stratified_subset('data/raw/Data_Entry_2017.csv')"
 
-Compile HDF5 Binary Storage
+# Compile HDF5 Binary Storage
 python scripts/build_hdf5.py
 
-**4. Launch the Backend API**
-Bash
+# 4. Launch the Backend API
+
 uvicorn api.main:app --reload --port 8000
 
-**5. Launch the Web Interface**
+# 5. Launch the Web Interface
 In a separate terminal:
 
-Bash
 python frontend/app.py
 
-**📡 API Reference**
+# 📡 API Reference
 POST /predict
 Upload a grayscale chest X-ray image file (.png, .jpg, .jpeg) to receive diagnostic prediction scores.
 
 Example Request (Python):
-Python
+
 import requests
 
 url = "[http://127.0.0.1:8000/predict](http://127.0.0.1:8000/predict)"
@@ -174,7 +172,7 @@ files = {"file": open("sample_xray.png", "rb")}
 response = requests.post(url, files=files)
 print(response.json())
 
-**Example Response Body:**
+# Example Response Body:
 
 {
   "predictions": {
@@ -198,6 +196,6 @@ print(response.json())
   "model_version": "1.0.0-INT8"
 }
 
+# ⚠️ Disclaimer
 
-**⚠️ Disclaimer**
 Research & Portfolio Demo Only: This software is intended strictly for academic, research, and technical demonstration purposes. It is not validated, certified, or FDA/CE approved for diagnostic or clinical use. Clinical judgments must always be made by qualified healthcare professionals.
