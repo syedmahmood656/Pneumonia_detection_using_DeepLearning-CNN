@@ -1,0 +1,13 @@
+data/
+venv/
+.venv/
+.git/
+.gitignore
+__pycache__/
+*.h5
+*.tar.gz
+*.zip
+*.ckpt
+*.csv
+notebooks/
+scripts/
